@@ -3,6 +3,15 @@ from webapp2_extras import json
 import cgi
 import urllib
 import webapp2
+from google.appengine.ext.webapp.util import login_required
+from google.appengine.api import users
+
+class Greet(webapp2.RequestHandler):
+		@login_required
+		def get(self):
+			user = users.get_current_user()
+			self.response.write("Hi, " + user.email() + "!")
+
 
 class DogWalker(ndb.Model):
     name = ndb.StringProperty()
