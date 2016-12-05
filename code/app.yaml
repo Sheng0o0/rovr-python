@@ -1,7 +1,8 @@
 runtime: python27
 api_version: 1
 threadsafe: true
-
+application: rovr-python 
+version: 1
 handlers:
 - url: /script\.js
   static_files: script.js
