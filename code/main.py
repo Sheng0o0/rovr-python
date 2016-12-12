@@ -6,11 +6,21 @@ import webapp2
 from google.appengine.ext.webapp.util import login_required
 from google.appengine.api import users
 
+JINJA_ENVIRONMENT = jinja2.Environment(
+    		loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+    		extensions=['jinja2.ext.autoescape'],
+    		autoescape=True)
+
 class Greet(webapp2.RequestHandler):
-		@login_required
-		def get(self):
-			user = users.get_current_user()
-			self.response.write("Hi, " + user.email() + "!")
+	@login_required
+	def get(self):
+		template = JINJA_ENVIRONMENT.get_template('index.html')
+		user = users.get_current_user()
+	    params = {
+			'nickname': user.nickname()
+		}
+		self.response.write(template.render(params))
+
 
 
 class DogWalker(ndb.Model):
@@ -89,4 +99,5 @@ app = webapp2.WSGIApplication([
     ('/create/request', CreateRequest),
     ('/delete/request', DeleteRequest),
     ('/get', GetAllData),
+	('/', Greet),
 ])
